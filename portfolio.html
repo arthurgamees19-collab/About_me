@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARTUR | PRO DEV</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
+body{background:#050505;color:#0ff;overflow-x:hidden}
+
+/* BACKGROUND */
+canvas{position:fixed;top:0;left:0;z-index:-1}
+
+/* NAV */
+nav{display:flex;justify-content:space-between;padding:20px 50px}
+nav h1{color:#0ff}
+nav a{color:#0ff;margin-left:20px;text-decoration:none}
+
+/* HERO */
+.hero{
+display:flex;flex-direction:column;align-items:center;justify-content:center;
+margin-top:80px;text-align:center
+}
+
+.profile{
+width:180px;height:180px;border-radius:50%;overflow:hidden;
+border:3px solid #0ff;
+box-shadow:0 0 40px #0ff,0 0 80px #0ff;
+transition:0.4s
+}
+.profile:hover{
+transform:scale(1.1) rotateY(10deg);
+box-shadow:0 0 80px #0ff,0 0 120px #0ff
+}
+.profile img{width:100%;height:100%;object-fit:cover}
+
+.hero h1{margin-top:20px;font-size:50px}
+.hero p{color:#aaa;margin-top:10px}
+
+/* SECTION */
+.section{width:90%;margin:100px auto}
+
+/* CARD */
+.card{
+background:rgba(255,255,255,0.05);
+border:1px solid rgba(0,255,255,0.3);
+backdrop-filter:blur(20px);
+padding:30px;border-radius:20px;
+transition:0.3s
+}
+.card:hover{transform:translateY(-10px)}
+
+/* CERTIFICATES */
+.cert-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:30px
+}
+.cert{perspective:1000px}
+.cert-inner{transition:0.2s;transform-style:preserve-3d}
+.cert img{
+width:100%;border-radius:15px;
+box-shadow:0 0 30px #0ff
+}
+
+/* CTA */
+.cta{
+text-align:center;
+padding:80px 20px;
+border:1px solid rgba(0,255,255,0.3);
+border-radius:20px;
+background:rgba(0,255,255,0.05);
+box-shadow:0 0 40px rgba(0,255,255,0.2)
+}
+.cta h2{font-size:40px}
+.cta p{color:#aaa;margin:20px 0}
+
+/* BUTTONS */
+.btn{
+padding:12px 25px;
+margin:10px;
+border:1px solid #0ff;
+background:transparent;
+color:#0ff;
+cursor:pointer;
+transition:0.3s;
+text-decoration:none;
+display:inline-block
+}
+.btn:hover{
+background:#0ff;
+color:#000;
+box-shadow:0 0 20px #0ff
+}
+
+/* ANIMATION */
+.fade{opacity:0;transform:translateY(50px);transition:1s}
+.fade.show{opacity:1;transform:translateY(0)}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="bg"></canvas>
+
+<nav>
+<h1>ARTUR</h1>
+<div>
+<a href="#">Home</a>
+<a href="#">Certificates</a>
+<a href="#">Hire Me</a>
+</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero fade">
+<div class="profile">
+<img src="artur.jpg">
+</div>
+<h1>ARTUR ALLAYOROV</h1>
+<p>Pro Developer | Gamer | Future Ethical Hacker</p>
+</section>
+
+<!-- ABOUT -->
+<section class="section fade">
+<div class="card">
+<h2>About Me</h2>
+<p>I build modern web systems, secure backend architectures and futuristic UI experiences.</p>
+</div>
+</section>
+
+<!-- CERTIFICATES -->
+<section class="section fade">
+<h2>Certificates</h2>
+
+<div class="cert-grid">
+
+<div class="cert">
+<div class="cert-inner">
+<img src="ser1.jpg">
+</div>
+</div>
+
+<div class="cert">
+<div class="cert-inner">
+<img src="ser2.jpg">
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- CTA -->
+<section class="section fade">
+<div class="cta">
+<h2>💼 Ready to Work With Me?</h2>
+<p>I build high-quality websites, backend systems and modern UI that clients love.</p>
+
+<a href="https://github.com" target="_blank" class="btn">View GitHub</a>
+<a href="mailto:your@email.com" class="btn">Hire Me</a>
+
+</div>
+</section>
+
+<script>
+
+/* PARTICLES */
+const canvas=document.getElementById("bg");
+const ctx=canvas.getContext("2d");
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+
+let p=[];
+for(let i=0;i<120;i++){
+p.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,s:Math.random()*2,v:Math.random()*1});
+}
+
+function anim(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+p.forEach(a=>{
+a.y+=a.v;
+if(a.y>canvas.height)a.y=0;
+ctx.fillStyle="#0ff";
+ctx.fillRect(a.x,a.y,a.s,a.s);
+});
+requestAnimationFrame(anim);
+}
+anim();
+
+/* SCROLL ANIMATION */
+const f=document.querySelectorAll(".fade");
+window.addEventListener("scroll",()=>{
+f.forEach(el=>{
+if(el.getBoundingClientRect().top<window.innerHeight-100){
+el.classList.add("show");
+}
+});
+});
+
+/* 3D CERT */
+document.querySelectorAll(".cert").forEach(card=>{
+card.addEventListener("mousemove",(e)=>{
+let inner=card.querySelector(".cert-inner");
+let rect=card.getBoundingClientRect();
+
+let x=(e.clientX-rect.left)/rect.width-0.5;
+let y=(e.clientY-rect.top)/rect.height-0.5;
+
+inner.style.transform=`rotateY(${x*20}deg) rotateX(${-y*20}deg)`;
+});
+card.addEventListener("mouseleave",()=>{
+card.querySelector(".cert-inner").style.transform="rotateY(0) rotateX(0)";
+});
+});
+
+</script>
+
+</body>
+</html>
